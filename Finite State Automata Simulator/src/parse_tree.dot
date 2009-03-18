@@ -1,0 +1,56 @@
+digraph "graph" {
+	node [label="\N"];
+	graph [center=true,
+		fontname=helvetica,
+		bb="0 0 416 468"];
+	subgraph token_graph {
+		graph [center="",
+			fontname="",
+			bb=""];
+		3083025836 [label="(", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083025868 [label="(", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083025900 [label=a, shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083025932 [label=".", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083025964 [label=b, shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083025996 [label="*", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026060 [label=".", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026092 [label=c, shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026188 [label=")", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026252 [label="+", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026284 [label=d, shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026316 [label=".", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026348 [label=e, shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083026380 [label="*", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+		3083788396 [label=")", shape=rect, width="0.5", regular=true, fixedsize=true, color=gray51, fontcolor=firebrick2];
+	}
+	3083788428 [label=re_atom, style=bold];
+	3083788364 [label=re_choice, style=bold];
+	3083026220 [label=re_atom, style=bold];
+	3083026156 [label=re_concat, style=bold];
+	3083026124 [label=re_concat, style=bold];
+	3083026028 [label=re_star, style=bold];
+	3083788332 [label=re_concat, style=bold];
+	3083026412 [label=re_star, style=bold];
+	3083788428 -> 3083025836 [arrowhead=diamond, arrowsize="0.35"];
+	3083026220 -> 3083025868 [arrowhead=diamond, arrowsize="0.35"];
+	3083026156 -> 3083025900 [arrowhead=diamond, arrowsize="0.35"];
+	3083026156 -> 3083025932 [arrowhead=diamond, arrowsize="0.35"];
+	3083026028 -> 3083025964 [arrowhead=diamond, arrowsize="0.35"];
+	3083026028 -> 3083025996 [arrowhead=diamond, arrowsize="0.35"];
+	3083026124 -> 3083026028 [arrowhead=diamond, arrowsize="0.35"];
+	3083026124 -> 3083026060 [arrowhead=diamond, arrowsize="0.35"];
+	3083026124 -> 3083026092 [arrowhead=diamond, arrowsize="0.35"];
+	3083026156 -> 3083026124 [arrowhead=diamond, arrowsize="0.35"];
+	3083026220 -> 3083026156 [arrowhead=diamond, arrowsize="0.35"];
+	3083026220 -> 3083026188 [arrowhead=diamond, arrowsize="0.35"];
+	3083788364 -> 3083026220 [arrowhead=diamond, arrowsize="0.35"];
+	3083788364 -> 3083026252 [arrowhead=diamond, arrowsize="0.35"];
+	3083788332 -> 3083026284 [arrowhead=diamond, arrowsize="0.35"];
+	3083788332 -> 3083026316 [arrowhead=diamond, arrowsize="0.35"];
+	3083026412 -> 3083026348 [arrowhead=diamond, arrowsize="0.35"];
+	3083026412 -> 3083026380 [arrowhead=diamond, arrowsize="0.35"];
+	3083788332 -> 3083026412 [arrowhead=diamond, arrowsize="0.35"];
+	3083788364 -> 3083788332 [arrowhead=diamond, arrowsize="0.35"];
+	3083788428 -> 3083788364 [arrowhead=diamond, arrowsize="0.35"];
+	3083788428 -> 3083788396 [arrowhead=diamond, arrowsize="0.35"];
+}
