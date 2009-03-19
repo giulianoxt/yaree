@@ -25,12 +25,18 @@ class FSA(object):
     def add_transition(self, s1, s2, c):
         self.fsa[s1][c].add(s2)
     
-    def set_first(self, state):
+    def first(self, state):
         self.first_s = state
         
-    def set_final(self, state):
+    def final(self, state):
         self.final_s.add(state)
-        
+    
+    def accepts(self, w, engine = 'nfa'):
+        if (engine == 'nfa'):
+            return self.run_nfa(w)
+        elif (engine == 'dfa'):
+            return self.run_dfa(w)
+    
     def run_dfa(self, w):
         s = self.first_s
         
@@ -74,21 +80,31 @@ class FSA(object):
             
         return lc    
 
+    def __iadd__(self, rhs):
+        if (hasattr(rhs, '__iter__')):
+            for s in rhs:
+                self.add_state(s)
+        else:
+            self.add_state(rhs)
+        
+        return self
+
+    def __setitem__(self, (s1, c), s2):
+        self.add_transition(s1, s2, c)
+
 
 if __name__ == '__main__':
     fsa = FSA('abc')
     
-    fsa.add_state('q0')
-    fsa.add_state('q1')
-    fsa.add_state('q2')
+    fsa += [0, 1, 2]
     
-    fsa.add_transition('q0', 'q0', '0')
-    fsa.add_transition('q0', 'q1', '#')
-    fsa.add_transition('q1', 'q1', '1')
-    fsa.add_transition('q1', 'q2', '#')
-    fsa.add_transition('q2', 'q2', '2')
+    fsa[0,'a'] = 0
+    fsa[0,'#'] = 1
+    fsa[1,'b'] = 1
+    fsa[1,'#'] = 2
+    fsa[2,'c'] = 2
     
-    fsa.set_first('q0')
-    fsa.set_final('q2')
+    fsa.first(0)
+    fsa.final(2)
     
-    print fsa.run_nfa('0011112222')
+    print fsa.accepts('aaaabbbccc')
