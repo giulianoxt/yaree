@@ -46,6 +46,9 @@ class FSA(object):
                 for s2 in s_set:
                     yield (s1, s2, c)
     
+    def __len__(self):
+        return len(self.fsa)
+    
     def run_dfa(self, w):
         s = self.first_s
         
@@ -104,19 +107,27 @@ class FSA(object):
 if __name__ == '__main__':
     from re_graphviz import render_fsa    
     
+    # Creates a FSA given its alphabet
     fsa = FSA('abc')
     
+    # Adds 3 new states
     fsa += [0, 1, 2]
     
-    fsa[0,'a'] = 0
+    # Adds five new transition edges (note that it's in fact non-deterministic)
     fsa[0,'#'] = 1
+    fsa[0,'a'] = 0 # Transition from 0, consuming 'a', to 0 
     fsa[1,'b'] = 1
-    fsa[1,'#'] = 2
+    fsa[1,'#'] = 2 # Transition from 1 to 2 consuming nothing (lambda transition)
     fsa[2,'c'] = 2
     
+    # Sets the initial state
     fsa.first(0)
+    
+    # Sets a final state (can have more than one too)
     fsa.final(2)
     
-    print fsa.accepts('abbbbbccccccccccccc')
+    # Runs the acceptance engine of the FSA, returning True or False
+    print fsa.accepts('aaaabbbbbccccc')
     
+    # Renders the 
     render_fsa(fsa, 'fsa.png')

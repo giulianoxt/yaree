@@ -54,12 +54,19 @@ def stylize_edge(edge):
 
 def graph_from_fsa(fsa):
     g = gv.digraph('graph')
+    gv.setv(g, 'rankdir', 'LR')
     
     for st in fsa.states():
         n = gv.node(g, str(st))
         gv.setv(n, 'label', str(st))
         
         gv.setv(n, 'shape', ('double' if st in fsa.final_s else '') + 'circle')
+        
+        if (st == fsa.first_s):
+            inv_n = gv.node(g, str(id([])))
+            gv.setv(inv_n, 'label', '')
+            gv.setv(inv_n, 'style', 'invis')
+            gv.edge(inv_n, n)
     
     for s1, s2, c in fsa.transitions():
         e = gv.edge(g, str(s1), str(s2))
