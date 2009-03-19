@@ -37,6 +37,15 @@ class FSA(object):
         elif (engine == 'dfa'):
             return self.run_dfa(w)
     
+    def states(self):
+        return self.fsa.iterkeys()
+    
+    def transitions(self):
+        for s1, m in self.fsa.iteritems():
+            for c, s_set in m.iteritems():
+                for s2 in s_set:
+                    yield (s1, s2, c)
+    
     def run_dfa(self, w):
         s = self.first_s
         
@@ -46,22 +55,21 @@ class FSA(object):
         return (s in self.final_s)
     
     def run_nfa(self, w):
-        st_now = set((self.first_s,))
         lc = self.lambda_closure()
+        st_now = set((self.first_s,))
         
         for c in w:
-            for st in frozenset(st_now):
-                st_now.update(lc[st]) 
-        
             st_next = set()
-            for s in st_now:
-                st_next.update(self.fsa[s][c])
+            
+            for st in st_now:
+                for s in lc[st]:
+                    st_next |= self.fsa[s][c] 
             
             st_now = st_next
             
-            if (not len(st_now)): return False
+            if (not st_now): return False
             
-        return len(st_now & self.final_s) > 0
+        return bool(st_now & self.final_s)
         
     def lambda_closure(self):
         def visit(s, vis):
@@ -94,6 +102,8 @@ class FSA(object):
 
 
 if __name__ == '__main__':
+    from re_graphviz import render_fsa    
+    
     fsa = FSA('abc')
     
     fsa += [0, 1, 2]
@@ -107,4 +117,6 @@ if __name__ == '__main__':
     fsa.first(0)
     fsa.final(2)
     
-    print fsa.accepts('aaaabbbccc')
+    print fsa.accepts('abbbbbccccccccccccc')
+    
+    render_fsa(fsa, 'fsa.png')
