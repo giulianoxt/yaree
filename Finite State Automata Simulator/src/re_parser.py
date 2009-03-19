@@ -49,6 +49,9 @@ class Rule(object):
 
         return '%s%s<%d,%d> [\n%s\n%s]' % (idt, self.name, self.rule, len(self.childs), ch, idt)
 
+    def __getitem__(self, i):
+        return self.childs[i]
+
 
 class Token(object):
     def __init__(self, name, lexem):

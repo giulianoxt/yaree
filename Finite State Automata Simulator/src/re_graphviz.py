@@ -70,7 +70,11 @@ def graph_from_fsa(fsa):
     
     for s1, s2, c in fsa.transitions():
         e = gv.edge(g, str(s1), str(s2))
-        gv.setv(e, 'label', ' %c ' % (c,))
+        
+        if (c == '#'):
+            c = u'\u03bb'
+            
+        gv.setv(e, 'label', (' ' + c + ' ').encode('utf-8'))
     
     return g
 
