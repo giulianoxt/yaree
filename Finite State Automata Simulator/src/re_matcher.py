@@ -9,7 +9,32 @@ __author__ = 'Giuliano Vilela (giulianoxt@gmail.com)'
 
 
 from re_fsa import FSA
+from re_graphviz import render_fsa
 from re_parser import RegExpParser, Token
+
+
+class RegularExpression(FSA):
+    def __init__(self, f):
+        self.fsa = f.fsa
+        self.first_s = f.first_s
+        self.final_s = f.final_s
+        self.lc = f.lc
+    
+    @staticmethod
+    def compile(re):
+        tree = RegExpParser(re).parse()
+        
+        fsa = fsa_from_tree(tree)
+        fsa.simplify()
+        fsa.compile()
+        
+        return RegularExpression(fsa)
+    
+    def match(self, str):
+        return self.accepts(str, engine = 'nfa')
+
+    def render_automata(self, filename):
+        render_fsa(self, filename)
 
 
 def fsa_from_tree(t):
@@ -71,22 +96,16 @@ def fsa_from_tree(t):
         f[end - 1,'#'] = end
         
         return f
-    
-
-def fsa_from_re(re):
-    tree = RegExpParser(re).parse()
-    
-    return fsa_from_tree(tree)
 
 
 if __name__ == '__main__':
     from os import system
-    from re_graphviz import render_fsa
     
-    fsa = fsa_from_re('((a.a + b.b + d)*.b.a.(c.c.c.d*))*')
+    re = RegularExpression.compile('(c.a + b* + d*.c) + a.a*')
     
-    print fsa.accepts('aaaaaabbbbbbbacccdddddddddd')
+    for s in ('aaa', 'bbbbbab', 'ddddc', 'aabda', 'bbbbbbcaaaaa'):
+        print 'S =', s, '- Yes!' if re.match(s) else '- No.'
     
-    render_fsa(fsa, 'fsa.png')
+    re.render_automata('fsa.png')
     
     system('display fsa.png')

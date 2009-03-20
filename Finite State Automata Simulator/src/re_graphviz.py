@@ -66,17 +66,25 @@ def graph_from_fsa(fsa):
             inv_n = gv.node(g, str(id([])))
             gv.setv(inv_n, 'label', '')
             gv.setv(inv_n, 'style', 'invis')
-            gv.edge(inv_n, n)
+            gv.setv(gv.edge(inv_n, n), 'color', 'gray51')
     
     for s1, s2, c in fsa.transitions():
         e = gv.edge(g, str(s1), str(s2))
         
+        gv.setv(e, 'color', 'gray71')
+        gv.setv(e, 'arrowsize', '0.7')
+    
         if (c == '#'):
             c = u'\u03bb'
+            gv.setv(e, 'fontcolor', 'goldenrod2')
+            gv.setv(e, 'style', 'dashed')
+        else:
+            gv.setv(e, 'fontcolor', 'firebrick2')
             
         gv.setv(e, 'label', (' ' + c + ' ').encode('utf-8'))
     
     return g
+
 
 def render_parse_tree(tree, filename, same_level = False, output_dot = None):
     g = graph_from_parse_tree(tree, same_level)

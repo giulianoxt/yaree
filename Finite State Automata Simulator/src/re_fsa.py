@@ -8,7 +8,7 @@ __license__ = 'LGPL'
 __author__ = 'Giuliano Vilela (giulianoxt@gmail.com)'
 
 
-from itertools import chain
+from itertools import chain, imap
 from collections import defaultdict
 
 
@@ -88,6 +88,9 @@ class FSA(object):
         self.first_s = f(self.first_s)
         self.final_s = set(map(f, self.final_s))
     
+    def compile(self):
+        self.lc = self.lambda_closure()
+    
     def run_dfa(self, w):
         s = self.first_s
         
@@ -97,7 +100,10 @@ class FSA(object):
         return (s in self.final_s)
     
     def run_nfa(self, w):
-        lc = self.lambda_closure()
+        try:
+            lc = self.lc
+        except AttributeError:
+            lc = self.lambda_closure()
         
         st_now = set(lc[self.first_s])
         
@@ -133,6 +139,39 @@ class FSA(object):
             
         return lc    
 
+    def simplify(self):
+        while True:
+            fsa = self.fsa
+            
+            for s in self.states():
+                if (s == self.first_s or s in self.final_s):
+                    continue
+                
+                if (fsa[s].keys() != ['#']):
+                    continue
+                
+                if any(imap(lambda (_, st, c) : st == s and c != '#', self.transitions())):
+                    continue
+                
+                out_set = fsa[s]['#']
+                
+                in_set = set(s1 for s1, s2, _ in self.transitions() if s2 == s)
+                
+                del fsa[s]
+                
+                for st in in_set:
+                    fsa[st]['#'].remove(s)
+                
+                for s1 in in_set:
+                    for s2 in out_set:
+                        if (s1 != s2): self[s1,'#'] = s2
+                
+                if hasattr(self, 'lc'): del self.lc
+                
+                break
+            else:
+                break
+
     def __len__(self):
         return len(self.fsa)
 
@@ -156,6 +195,7 @@ class FSA(object):
 
 
 if __name__ == '__main__':
+    from os import system
     from re_graphviz import render_fsa    
     
     # Creates a empty FSA
@@ -180,5 +220,8 @@ if __name__ == '__main__':
     # Runs the acceptance engine of the FSA, returning True or False
     print fsa.accepts('aaaabbbbbccccc')
     
-    # Renders the 
+    # Renders the automata to a PNG 
     render_fsa(fsa, 'fsa.png')
+    
+    # Displays it on the X server
+    system('display fsa.png')
